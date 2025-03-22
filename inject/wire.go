@@ -13,16 +13,25 @@ import (
 	"github.com/y-yu/kindle-clock-go/repository"
 )
 
-func Initialize(ctx context.Context) domainRepository.AwairRepository {
-	wire.Build(
-		domain.NewSystemClock,
-		api.NewAwairApiClient,
-		cache.NewAwairCacheClient,
-		repository.NewAwairRepository,
-		wire.Bind(
-			new(domain.Clock),
-			new(*domain.SystemClock),
-		),
-	)
+var binding = wire.NewSet(
+	domain.NewSystemClock,
+	api.NewAwairApiClient,
+	api.NewNatureRemoApiClient,
+	cache.NewAwairCacheClient,
+	repository.NewAwairRepository,
+	repository.NewNatureRemoRepository,
+	wire.Bind(
+		new(domain.Clock),
+		new(*domain.SystemClock),
+	),
+)
+
+func AwairRepository(ctx context.Context) domainRepository.AwairRepository {
+	wire.Build(binding)
+	return nil
+}
+
+func NatureRemoRepository(ctx context.Context) domainRepository.NatureRemoRepository {
+	wire.Build(binding)
 	return nil
 }

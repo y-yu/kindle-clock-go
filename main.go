@@ -183,12 +183,19 @@ func main() {
 
 	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
 		ctx := r.Context()
-		repo := inject.Initialize(ctx)
-		response, err := repo.GetRoomInfo(ctx)
+		awairRepository := inject.AwairRepository(ctx)
+		response, err := awairRepository.GetRoomInfo(ctx)
 		if err != nil {
 			slog.Warn("Error!", "error", err)
 		}
-		slog.Info("GetRoomInfo", "response", response)
+		slog.Info("Awair GetRoomInfo", "response", response)
+
+		natureRemoRepository := inject.NatureRemoRepository(ctx)
+		response2, err := natureRemoRepository.GetRoomInfo(ctx)
+		if err != nil {
+			slog.Warn("Error!", "error", err)
+		}
+		slog.Info("Nature Remo GetRoomInfo", "response", response2)
 
 		buf := convertSVGTest()
 		w.Header().Set("Content-Type", "image/png")

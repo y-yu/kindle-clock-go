@@ -8,6 +8,7 @@ package inject
 
 import (
 	"context"
+	"github.com/google/wire"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/api"
@@ -17,10 +18,24 @@ import (
 
 // Injectors from wire.go:
 
-func Initialize(ctx context.Context) repository.AwairRepository {
+func AwairRepository(ctx context.Context) repository.AwairRepository {
 	awairApiClient := api.NewAwairApiClient(ctx)
 	cacheClient := cache.NewAwairCacheClient(ctx)
 	systemClock := domain.NewSystemClock()
 	awairRepository := repository2.NewAwairRepository(ctx, awairApiClient, cacheClient, systemClock)
 	return awairRepository
 }
+
+func NatureRemoRepository(ctx context.Context) repository.NatureRemoRepository {
+	natureRemoApiClient := api.NewNatureRemoApiClient(ctx)
+	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoApiClient)
+	return natureRemoRepository
+}
+
+// wire.go:
+
+var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairApiClient, api.NewNatureRemoApiClient, cache.NewAwairCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, wire.Bind(
+	new(domain.Clock),
+	new(*domain.SystemClock),
+),
+)

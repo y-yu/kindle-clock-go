@@ -7,9 +7,7 @@ import (
 	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model/config"
-	"io"
 	"log"
-	"net/http"
 )
 
 type AwairApiClientImpl struct {
@@ -33,20 +31,14 @@ func (a *AwairApiClientImpl) GetLatestAirData(ctx context.Context) (api.AwairAir
 		a.config.DeviceType,
 		a.config.DeviceID,
 	)
-	req, err := http.NewRequest("GET", url, nil)
+	airData, err := GetRequestAPI(
+		ctx,
+		url, a.config.OAuthToken,
+		func(body []byte, result *api.AwairAirResponse) error {
+			return json.Unmarshal(body, result)
+		},
+	)
 	if err != nil {
-		return api.AwairAirResponse{}, err
-	}
-	req.Header.Set("Authorization", "Bearer "+a.config.OAuthToken)
-
-	client := new(http.Client)
-	resp, err := client.Do(req)
-	defer resp.Body.Close()
-
-	body, _ := io.ReadAll(resp.Body)
-	var airData api.AwairAirResponse
-	if err := json.Unmarshal(body, &airData); err != nil {
-		log.Fatal(err)
 		return api.AwairAirResponse{}, err
 	}
 	return airData, nil
