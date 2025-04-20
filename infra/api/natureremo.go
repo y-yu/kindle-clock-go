@@ -75,11 +75,9 @@ func (n *NatureRemoApiClientImpl) GetLatestSmartMeterData(ctx context.Context) (
 		url,
 		n.config.OAuthToken,
 		func(body []byte, result *api.NatureRemoSmartMeterResponse) error {
-			slog.Info("GetLatestSmartMeterData", "body", body)
 			return parserJsonArray(body, result)
 		},
 	)
-	slog.Info("GetLatestSmartMeterData", "data", data)
 	if err != nil {
 		return api.NatureRemoSmartMeterResponse{}, err
 	}

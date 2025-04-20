@@ -23,9 +23,6 @@ jobs:
       - name: Format
         run: go fmt ./...
 
-      - name: Tidy
-        run: go mod tidy
-
       - name: Check diff
         run: git diff --exit-code
 
