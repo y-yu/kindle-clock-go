@@ -26,6 +26,6 @@ func InitializeRedisClient(ctx context.Context) error {
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
-	
+
 	return nil
 }
