@@ -11,7 +11,7 @@ require (
 	github.com/redis/go-redis/v9 v9.7.1
 	github.com/sethvargo/go-envconfig v1.1.1
 	github.com/stretchr/testify v1.10.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
