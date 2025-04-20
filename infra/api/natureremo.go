@@ -26,7 +26,8 @@ func NewNatureRemoApiClient(ctx context.Context) api.NatureRemoApiClient {
 	}
 }
 
-func parser[A any](
+// A is array item type
+func parserJsonArray[A any](
 	body []byte,
 	result *A,
 ) error {
@@ -55,7 +56,7 @@ func (n *NatureRemoApiClientImpl) GetLatestAllDevicesEvents(ctx context.Context)
 		url,
 		n.config.OAuthToken,
 		func(body []byte, result *api.NatureRemoLatestEvent) error {
-			return parser(body, result)
+			return parserJsonArray(body, result)
 		},
 	)
 	if err != nil {
@@ -66,7 +67,7 @@ func (n *NatureRemoApiClientImpl) GetLatestAllDevicesEvents(ctx context.Context)
 
 func (n *NatureRemoApiClientImpl) GetLatestSmartMeterData(ctx context.Context) (api.NatureRemoSmartMeterResponse, error) {
 	url := fmt.Sprintf(
-		"%s/1/devices",
+		"%s/1/appliances",
 		n.config.NatureRemoEndpointURL,
 	)
 	data, err := GetRequestAPI(
@@ -74,9 +75,11 @@ func (n *NatureRemoApiClientImpl) GetLatestSmartMeterData(ctx context.Context) (
 		url,
 		n.config.OAuthToken,
 		func(body []byte, result *api.NatureRemoSmartMeterResponse) error {
-			return parser(body, result)
+			slog.Info("GetLatestSmartMeterData", "body", body)
+			return parserJsonArray(body, result)
 		},
 	)
+	slog.Info("GetLatestSmartMeterData", "data", data)
 	if err != nil {
 		return api.NatureRemoSmartMeterResponse{}, err
 	}

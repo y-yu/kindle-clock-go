@@ -8,6 +8,9 @@ import (
 	"strconv"
 )
 
+// nowElectricEnergyNumber is said in https://developer.nature.global/jp/how-to-calculate-energy-data-from-smart-meter-values
+const nowElectricEnergyNumber = 231
+
 type NatureRemoRepositoryImpl struct {
 	client api.NatureRemoApiClient
 }
@@ -28,10 +31,17 @@ func (n *NatureRemoRepositoryImpl) GetRoomInfo(ctx context.Context) (model.Natur
 		return model.NatureRemoRoomInfo{}, err
 	}
 
-	electricEnergy, err := strconv.Atoi(data.SmartMeter.EchonetliteProperties.Val)
-	if err != nil {
-		return model.NatureRemoRoomInfo{}, err
+	electricEnergy := 0
+	for _, property := range data.SmartMeter.EchonetliteProperties {
+		if property.Epc == nowElectricEnergyNumber {
+			electricEnergy, err = strconv.Atoi(property.Val)
+			if err != nil {
+				return model.NatureRemoRoomInfo{}, err
+			}
+			break
+		}
 	}
+
 	return model.NatureRemoRoomInfo{
 		Temperature:    model.Temperature(event.NewestEvents.Te.Val),
 		Humidity:       model.Humidity(event.NewestEvents.Te.Val),

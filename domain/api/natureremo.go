@@ -17,13 +17,13 @@ type NatureRemoLatestEvent struct {
 
 type NatureRemoSmartMeterResponse struct {
 	SmartMeter struct {
-		EchonetliteProperties struct {
+		EchonetliteProperties []struct {
 			Name      string `json:"name"`
-			Epc       int    `json:"epc"`
-			Val       string `json:"val"`
+			Epc       int    `json:"epc" validate:"required"`
+			Val       string `json:"val" validate:"required"`
 			UpdatedAt string `json:"updated_at"`
-		} `json:"echonetlite_properties"`
-	} `json:"smart_meter"`
+		} `json:"echonetlite_properties" validate:"required"`
+	} `json:"smart_meter" validate:"required"`
 }
 
 type NatureRemoApiClient interface {
