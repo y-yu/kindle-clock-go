@@ -11,7 +11,7 @@ require (
 	github.com/redis/go-redis/v9 v9.7.1
 	github.com/sethvargo/go-envconfig v1.1.1
 	github.com/stretchr/testify v1.10.0
-	google.golang.org/protobuf v1.36.5
+	google.golang.org/protobuf v1.36.6
 )
 
 require (
@@ -33,6 +33,7 @@ require (
 	github.com/gobwas/glob v0.2.3 // indirect
 	github.com/gohugoio/hugo v0.134.3 // indirect
 	github.com/google/subcommands v1.2.0 // indirect
+	github.com/google/uuid v1.6.0 // indirect
 	github.com/leodido/go-urn v1.4.0 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect
@@ -49,6 +50,7 @@ require (
 	golang.org/x/sys v0.29.0 // indirect
 	golang.org/x/text v0.21.0 // indirect
 	golang.org/x/tools v0.25.0 // indirect
+	google.golang.org/grpc/cmd/protoc-gen-go-grpc v1.5.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
 

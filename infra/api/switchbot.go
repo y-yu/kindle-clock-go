@@ -1,0 +1,106 @@
+package api
+
+import (
+	"context"
+	"crypto/hmac"
+	"crypto/sha256"
+	"encoding/base64"
+	"fmt"
+	"github.com/google/uuid"
+	"github.com/sethvargo/go-envconfig"
+	"github.com/y-yu/kindle-clock-go/domain/api"
+	"github.com/y-yu/kindle-clock-go/domain/model/config"
+	"log"
+	"net/http"
+	"time"
+)
+
+type SwitchBotApiClientImpl struct {
+	config config.SwitchBotConfiguration
+}
+
+func NewSwitchBotApiClient(ctx context.Context) api.SwitchBotApiClient {
+	var c config.SwitchBotConfiguration
+	if err := envconfig.Process(ctx, &c); err != nil {
+		log.Fatal(err)
+	}
+	return &SwitchBotApiClientImpl{
+		config: c,
+	}
+}
+
+var _ api.SwitchBotApiClient = (*SwitchBotApiClientImpl)(nil)
+
+// https://github.com/OpenWonderLabs/SwitchBotAPI?tab=readme-ov-file#authentication]]
+func requestWithAuthorization[A any](
+	ctx context.Context,
+	url string,
+	oauthToken string,
+	oauthSecret string,
+	jsonParser func(body []byte, result *A) error,
+) (A, error) {
+	var result A
+
+	nonce, err := uuid.NewUUID()
+	if err != nil {
+		return result, err
+	}
+	now := fmt.Sprintf("%d", time.Now().UnixMilli())
+	data := fmt.Sprintf("%s%s%s", oauthToken, now, nonce.String())
+
+	mac := hmac.New(sha256.New, []byte(oauthSecret))
+	mac.Write([]byte(data))
+	sign := base64.StdEncoding.EncodeToString(mac.Sum(nil))
+
+	result, err = GetRequestAPI(ctx, url, oauthToken, jsonParser, func(req *http.Request) {
+		req.Header.Set("sign", sign)
+		req.Header.Set("nonce", nonce.String())
+		req.Header.Set("t", now)
+	})
+
+	return result, nil
+}
+
+func (s *SwitchBotApiClientImpl) GetDevices(ctx context.Context) (api.SwitchBotDevicesResponse, error) {
+	url := fmt.Sprintf(
+		"%s/v1.1/devices",
+		s.config.SwitchBotEndpointURL,
+	)
+	data, err := requestWithAuthorization(
+		ctx,
+		url,
+		s.config.OAuthToken,
+		s.config.OAuthSecret,
+		func(body []byte, result *api.SwitchBotDevicesResponse) error {
+			return parserJsonArray(body, result)
+		},
+	)
+	if err != nil {
+		return api.SwitchBotDevicesResponse{}, err
+	}
+	return data, nil
+}
+
+func (s *SwitchBotApiClientImpl) GetLatestMeterData(
+	ctx context.Context,
+	deviceID string,
+) (api.SwitchBotDeviceStatusResponse, error) {
+	url := fmt.Sprintf(
+		"%s/v1.1/devices/%s/status",
+		s.config.SwitchBotEndpointURL,
+		deviceID,
+	)
+	data, err := requestWithAuthorization(
+		ctx,
+		url,
+		s.config.OAuthToken,
+		s.config.OAuthSecret,
+		func(body []byte, result *api.SwitchBotDeviceStatusResponse) error {
+			return parserJsonArray(body, result)
+		},
+	)
+	if err != nil {
+		return api.SwitchBotDeviceStatusResponse{}, err
+	}
+	return data, err
+}

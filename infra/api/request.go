@@ -13,12 +13,19 @@ func GetRequestAPI[A any](
 	url string,
 	oauthToken string,
 	jsonParser func(body []byte, result *A) error,
+	headerHandler ...func(req *http.Request),
 ) (A, error) {
 	var result A
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return result, err
+	}
+
+	if len(headerHandler) > 0 {
+		for _, h := range headerHandler {
+			h(req)
+		}
 	}
 	SetAuthHeader(req, oauthToken)
 

@@ -10,6 +10,7 @@ import (
 	"context"
 	"github.com/google/wire"
 	"github.com/y-yu/kindle-clock-go/domain"
+	api2 "github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
@@ -32,9 +33,14 @@ func NatureRemoRepository(ctx context.Context) repository.NatureRemoRepository {
 	return natureRemoRepository
 }
 
+func SwitchBotClient(ctx context.Context) api2.SwitchBotApiClient {
+	switchBotApiClient := api.NewSwitchBotApiClient(ctx)
+	return switchBotApiClient
+}
+
 // wire.go:
 
-var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairApiClient, api.NewNatureRemoApiClient, cache.NewAwairCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, wire.Bind(
+var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairApiClient, api.NewNatureRemoApiClient, api.NewSwitchBotApiClient, cache.NewAwairCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, wire.Bind(
 	new(domain.Clock),
 	new(*domain.SystemClock),
 ),

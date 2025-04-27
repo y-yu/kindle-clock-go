@@ -197,6 +197,13 @@ func main() {
 		}
 		slog.Info("Nature Remo GetRoomInfo", "response", response2)
 
+		switchBotClient := inject.SwitchBotClient(ctx)
+		response3, err := switchBotClient.GetDevices(ctx)
+		if err != nil {
+			slog.Warn("Error!", "error", err)
+		}
+		slog.Info("SwitchBot devices", "response", response3)
+
 		buf := convertSVGTest()
 		w.Header().Set("Content-Type", "image/png")
 		w.Write(buf.Bytes())

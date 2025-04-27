@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package kindleclock.infra.datamodel.switchbot;
+
+option go_package = "github.com/y-yu/kindle-clock-go/proto";
+
+message SwitchBotDevicesDataModel {
+  repeated SwitchBotDevice devices = 1;
+}
+
+message SwitchBotDevice {
+  string deviceId = 1;
+  string deviceType = 2;
+}
