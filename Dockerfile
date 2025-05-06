@@ -11,7 +11,6 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server main.go
 
 FROM ubuntu:24.04
 
-# 必要な環境変数を設定
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -23,6 +22,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 COPY --from=builder /app/server /bin/server
+
+ENV TZ=Asia/Tokyo
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/server"]
