@@ -12,10 +12,10 @@ import (
 const nowElectricEnergyNumber = 231
 
 type NatureRemoRepositoryImpl struct {
-	client api.NatureRemoApiClient
+	client api.NatureRemoAPIClient
 }
 
-func NewNatureRemoRepository(client api.NatureRemoApiClient) repository.NatureRemoRepository {
+func NewNatureRemoRepository(client api.NatureRemoAPIClient) repository.NatureRemoRepository {
 	return &NatureRemoRepositoryImpl{
 		client: client,
 	}
@@ -44,7 +44,7 @@ func (n *NatureRemoRepositoryImpl) GetRoomInfo(ctx context.Context) (model.Natur
 
 	return model.NatureRemoRoomInfo{
 		Temperature:    model.Temperature(event.NewestEvents.Te.Val),
-		Humidity:       model.Humidity(event.NewestEvents.Te.Val),
+		Humidity:       model.Humidity(event.NewestEvents.Hu.Val),
 		ElectricEnergy: model.ElectricEnergy(electricEnergy),
 	}, nil
 }

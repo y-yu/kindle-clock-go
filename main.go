@@ -197,12 +197,19 @@ func main() {
 		}
 		slog.Info("Nature Remo GetRoomInfo", "response", response2)
 
-		switchBotClient := inject.SwitchBotClient(ctx)
-		response3, err := switchBotClient.GetDevices(ctx)
+		switchBotRepository := inject.SwitchBotRepository(ctx)
+		response3, err := switchBotRepository.GetRoomInfo(ctx)
 		if err != nil {
 			slog.Warn("Error!", "error", err)
 		}
-		slog.Info("SwitchBot devices", "response", response3)
+		slog.Info("SwitchBot GetRoomInfo", "response", response3)
+
+		openWeatherMapRepository := inject.OpenWeatherMapRepository(ctx)
+		response4, err := openWeatherMapRepository.GetCurrentWeather(ctx)
+		if err != nil {
+			slog.Warn("Error!", "error", err)
+		}
+		slog.Info("OpenWeatherMap Weather", "response", response4)
 
 		buf := convertSVGTest()
 		w.Header().Set("Content-Type", "image/png")

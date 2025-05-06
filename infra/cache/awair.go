@@ -6,7 +6,6 @@ import (
 	"github.com/redis/go-redis/v9"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/infra/cache/proto"
-	"log"
 	"time"
 )
 
@@ -14,13 +13,12 @@ type AwairCacheClientImpl struct {
 	client *redis.Client
 }
 
+var _ domain.CacheClient[*proto.AwairDataModel] = (*AwairCacheClientImpl)(nil)
+
 func NewAwairCacheClient(ctx context.Context) domain.CacheClient[*proto.AwairDataModel] {
-	if redisClient == nil {
-		err := InitializeRedisClient(ctx)
-		if err != nil {
-			log.Fatal(err)
-		}
-		log.Printf("Initialized redis client:  %v", redisClient)
+	err := InitializeRedisClient(ctx)
+	if err != nil {
+		panic(err)
 	}
 	return &AwairCacheClientImpl{redisClient}
 }

@@ -7,7 +7,6 @@ import (
 	"context"
 	"github.com/google/wire"
 	"github.com/y-yu/kindle-clock-go/domain"
-	domainApi "github.com/y-yu/kindle-clock-go/domain/api"
 	domainRepository "github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
@@ -16,12 +15,16 @@ import (
 
 var binding = wire.NewSet(
 	domain.NewSystemClock,
-	api.NewAwairApiClient,
-	api.NewNatureRemoApiClient,
-	api.NewSwitchBotApiClient,
+	api.NewAwairAPIClient,
+	api.NewNatureRemoAPIClient,
+	api.NewSwitchBotAPIClient,
+	api.NewOpenWeatherMapAPIClient,
 	cache.NewAwairCacheClient,
+	cache.NewSwitchBotCacheClient,
 	repository.NewAwairRepository,
 	repository.NewNatureRemoRepository,
+	repository.NewSwitchBotRepository,
+	repository.NewOpenWeatherMapRepository,
 	wire.Bind(
 		new(domain.Clock),
 		new(*domain.SystemClock),
@@ -38,7 +41,12 @@ func NatureRemoRepository(ctx context.Context) domainRepository.NatureRemoReposi
 	return nil
 }
 
-func SwitchBotClient(ctx context.Context) domainApi.SwitchBotApiClient {
+func SwitchBotRepository(ctx context.Context) domainRepository.SwitchBotRepository {
+	wire.Build(binding)
+	return nil
+}
+
+func OpenWeatherMapRepository(ctx context.Context) domainRepository.OpenWeatherMapRepository {
 	wire.Build(binding)
 	return nil
 }

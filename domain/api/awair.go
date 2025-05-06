@@ -20,6 +20,6 @@ type AwairAirResponse struct {
 	} `json:"data"`
 }
 
-type AwairApiClient interface {
+type AwairAPIClient interface {
 	GetLatestAirData(ctx context.Context) (AwairAirResponse, error)
 }

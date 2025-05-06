@@ -16,14 +16,14 @@ import (
 
 type AwairRepositoryImpl struct {
 	config           config.AwairConfiguration
-	awairApiClient   api.AwairApiClient
+	awairAPIClient   api.AwairAPIClient
 	awairCacheClient domain.CacheClient[*proto.AwairDataModel]
 	clock            domain.Clock
 }
 
 func NewAwairRepository(
 	ctx context.Context,
-	awairApiClient api.AwairApiClient,
+	awairAPIClient api.AwairAPIClient,
 	awairCacheClient domain.CacheClient[*proto.AwairDataModel],
 	clock domain.Clock,
 ) repository.AwairRepository {
@@ -34,7 +34,7 @@ func NewAwairRepository(
 
 	return &AwairRepositoryImpl{
 		config:           c,
-		awairApiClient:   awairApiClient,
+		awairAPIClient:   awairAPIClient,
 		awairCacheClient: awairCacheClient,
 		clock:            clock,
 	}
@@ -64,7 +64,7 @@ func (a *AwairRepositoryImpl) GetRoomInfo(ctx context.Context) (model.AwairRoomI
 		}
 		return info, nil
 	}
-	response, err := a.awairApiClient.GetLatestAirData(ctx)
+	response, err := a.awairAPIClient.GetLatestAirData(ctx)
 	if err != nil {
 		return model.AwairRoomInfo{}, err
 	}

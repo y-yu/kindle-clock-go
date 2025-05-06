@@ -10,7 +10,6 @@ import (
 	"context"
 	"github.com/google/wire"
 	"github.com/y-yu/kindle-clock-go/domain"
-	api2 "github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
@@ -20,27 +19,36 @@ import (
 // Injectors from wire.go:
 
 func AwairRepository(ctx context.Context) repository.AwairRepository {
-	awairApiClient := api.NewAwairApiClient(ctx)
+	awairAPIClient := api.NewAwairAPIClient(ctx)
 	cacheClient := cache.NewAwairCacheClient(ctx)
 	systemClock := domain.NewSystemClock()
-	awairRepository := repository2.NewAwairRepository(ctx, awairApiClient, cacheClient, systemClock)
+	awairRepository := repository2.NewAwairRepository(ctx, awairAPIClient, cacheClient, systemClock)
 	return awairRepository
 }
 
 func NatureRemoRepository(ctx context.Context) repository.NatureRemoRepository {
-	natureRemoApiClient := api.NewNatureRemoApiClient(ctx)
-	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoApiClient)
+	natureRemoAPIClient := api.NewNatureRemoAPIClient(ctx)
+	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoAPIClient)
 	return natureRemoRepository
 }
 
-func SwitchBotClient(ctx context.Context) api2.SwitchBotApiClient {
-	switchBotApiClient := api.NewSwitchBotApiClient(ctx)
-	return switchBotApiClient
+func SwitchBotRepository(ctx context.Context) repository.SwitchBotRepository {
+	switchBotAPIClient := api.NewSwitchBotAPIClient(ctx)
+	cacheClient := cache.NewSwitchBotCacheClient(ctx)
+	systemClock := domain.NewSystemClock()
+	switchBotRepository := repository2.NewSwitchBotRepository(ctx, switchBotAPIClient, cacheClient, systemClock)
+	return switchBotRepository
+}
+
+func OpenWeatherMapRepository(ctx context.Context) repository.OpenWeatherMapRepository {
+	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(ctx)
+	openWeatherMapRepository := repository2.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
+	return openWeatherMapRepository
 }
 
 // wire.go:
 
-var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairApiClient, api.NewNatureRemoApiClient, api.NewSwitchBotApiClient, cache.NewAwairCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, wire.Bind(
+var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, wire.Bind(
 	new(domain.Clock),
 	new(*domain.SystemClock),
 ),

@@ -12,16 +12,16 @@ import (
 	"log/slog"
 )
 
-type NatureRemoApiClientImpl struct {
+type NatureRemoAPIClientImpl struct {
 	config config.NatureRemoConfiguration
 }
 
-func NewNatureRemoApiClient(ctx context.Context) api.NatureRemoApiClient {
+func NewNatureRemoAPIClient(ctx context.Context) api.NatureRemoAPIClient {
 	var c config.NatureRemoConfiguration
 	if err := envconfig.Process(ctx, &c); err != nil {
 		log.Fatal(err)
 	}
-	return &NatureRemoApiClientImpl{
+	return &NatureRemoAPIClientImpl{
 		config: c,
 	}
 }
@@ -46,7 +46,7 @@ func parserJsonArray[A any](
 	return fmt.Errorf("item not found")
 }
 
-func (n *NatureRemoApiClientImpl) GetLatestAllDevicesEvents(ctx context.Context) (api.NatureRemoLatestEvent, error) {
+func (n *NatureRemoAPIClientImpl) GetLatestAllDevicesEvents(ctx context.Context) (api.NatureRemoLatestEvent, error) {
 	url := fmt.Sprintf(
 		"%s/1/devices",
 		n.config.NatureRemoEndpointURL,
@@ -65,7 +65,7 @@ func (n *NatureRemoApiClientImpl) GetLatestAllDevicesEvents(ctx context.Context)
 	return data, nil
 }
 
-func (n *NatureRemoApiClientImpl) GetLatestSmartMeterData(ctx context.Context) (api.NatureRemoSmartMeterResponse, error) {
+func (n *NatureRemoAPIClientImpl) GetLatestSmartMeterData(ctx context.Context) (api.NatureRemoSmartMeterResponse, error) {
 	url := fmt.Sprintf(
 		"%s/1/appliances",
 		n.config.NatureRemoEndpointURL,

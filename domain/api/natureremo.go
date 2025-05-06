@@ -26,7 +26,7 @@ type NatureRemoSmartMeterResponse struct {
 	} `json:"smart_meter" validate:"required"`
 }
 
-type NatureRemoApiClient interface {
+type NatureRemoAPIClient interface {
 	GetLatestAllDevicesEvents(ctx context.Context) (NatureRemoLatestEvent, error)
 
 	GetLatestSmartMeterData(ctx context.Context) (NatureRemoSmartMeterResponse, error)

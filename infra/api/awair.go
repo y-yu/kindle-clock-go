@@ -10,21 +10,21 @@ import (
 	"log"
 )
 
-type AwairApiClientImpl struct {
+type AwairAPIClientImpl struct {
 	config config.AwairConfiguration
 }
 
-func NewAwairApiClient(ctx context.Context) api.AwairApiClient {
+func NewAwairAPIClient(ctx context.Context) api.AwairAPIClient {
 	var c config.AwairConfiguration
 	if err := envconfig.Process(ctx, &c); err != nil {
 		log.Fatal(err)
 	}
-	return &AwairApiClientImpl{
+	return &AwairAPIClientImpl{
 		config: c,
 	}
 }
 
-func (a *AwairApiClientImpl) GetLatestAirData(ctx context.Context) (api.AwairAirResponse, error) {
+func (a *AwairAPIClientImpl) GetLatestAirData(ctx context.Context) (api.AwairAirResponse, error) {
 	url := fmt.Sprintf(
 		"%s/v1/users/self/devices/%s/%s/air-data/latest?fahrenheit=false",
 		a.config.AwairEndpointURL,

@@ -7,6 +7,8 @@ import (
 	"net/http"
 )
 
+var client = http.DefaultClient
+
 // GetRequestAPI sends GET method HTTP request to the url with oauthToken.
 func GetRequestAPI[A any](
 	ctx context.Context,
@@ -17,7 +19,7 @@ func GetRequestAPI[A any](
 ) (A, error) {
 	var result A
 
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	if err != nil {
 		return result, err
 	}
@@ -29,7 +31,6 @@ func GetRequestAPI[A any](
 	}
 	SetAuthHeader(req, oauthToken)
 
-	client := new(http.Client)
 	resp, err := client.Do(req)
 	defer func() {
 		err := resp.Body.Close()
@@ -37,7 +38,7 @@ func GetRequestAPI[A any](
 			slog.Error(
 				"Request body close error!",
 				"err", err,
-				"method", "GET",
+				"method", http.MethodGet,
 				"url", url,
 			)
 		}
@@ -53,7 +54,7 @@ func GetRequestAPI[A any](
 			"JSON body parse error!",
 			"err", err,
 			"body", string(body),
-			"method", "GET",
+			"method", http.MethodGet,
 			"url", url,
 		)
 		return result, err

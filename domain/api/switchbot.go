@@ -4,12 +4,14 @@ import "context"
 
 const SwitchBotDeviceTypeMeterPlus = "MeterPlus"
 
+type SwitchBotDeviceList struct {
+	DeviceId   string `json:"deviceId"`
+	DeviceType string `json:"deviceType"`
+}
+
 type SwitchBotDevicesResponse struct {
 	Body struct {
-		DeviceList []struct {
-			DeviceId   string `json:"deviceId"`
-			DeviceType string `json:"deviceType"`
-		} `json:"deviceList" validate:"required"`
+		DeviceList []SwitchBotDeviceList `json:"deviceList" validate:"required"`
 	} `json:"body" validate:"required"`
 }
 
@@ -21,7 +23,7 @@ type SwitchBotDeviceStatusResponse struct {
 	} `json:"body" validate:"required"`
 }
 
-type SwitchBotApiClient interface {
+type SwitchBotAPIClient interface {
 	GetDevices(ctx context.Context) (SwitchBotDevicesResponse, error)
 
 	GetLatestMeterData(ctx context.Context, deviceID string) (SwitchBotDeviceStatusResponse, error)
