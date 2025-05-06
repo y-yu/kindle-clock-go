@@ -15,12 +15,12 @@ const svgStringFormat = `<svg width="%d" height="%d" xmlns="http://www.w3.org/20
 	</style>
 
 	<title>Kindle Clock</title>
-	<g font-family="Dosis">
-		<text font-size="150px" y="150" x="510" text-anchor="middle">
+	<g transform="%s" font-family="Dosis">
+		<text font-size="140px" y="300" x="380" text-anchor="middle">
 			%s
 		</text>
 
-		<text font-size="540px" y="720" x="520" text-anchor="middle">
+		<text font-size="470" y="790" x="380" text-anchor="middle">
 			<tspan>%s</tspan>
 			<tspan dy="-0.15em">:</tspan>
 			<tspan dy="0.15em">%s</tspan>
@@ -41,19 +41,19 @@ func NewClockHandler(clock domain.Clock) *ClockHandler {
 func (ch *ClockHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	now := ch.clock.Now()
 	colors := presenter.CalculateColors(now)
-	//transform := fmt.Sprintf("rotate(-90, %d, %d)", presenter.Width/2, presenter.Height/2)
+	transform := fmt.Sprintf("rotate(-90, %d, %d)", presenter.Width/2, presenter.Height/2)
 	svgString := fmt.Sprintf(
 		svgStringFormat,
-		presenter.Height,
 		presenter.Width,
+		presenter.Height,
 		colors.Text,
 		colors.Text,
-		//transform,
+		transform,
 		now.Format("Mon, 02 Jan 2006"),
 		now.Format("15"),
 		now.Format("04"),
 	)
-	buf, err := presenter.ConvertSVGToPNG(svgString, colors.Bg, presenter.Height, presenter.Width)
+	buf, err := presenter.ConvertSVGToPNG(svgString, colors.Bg, presenter.Width, presenter.Height)
 	if err != nil {
 		slog.Error("failed to convert SVG to PNG", "err", err)
 		w.WriteHeader(http.StatusInternalServerError)

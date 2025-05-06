@@ -23,7 +23,5 @@ RUN apt-get update && \
 
 COPY --from=builder /app/server /bin/server
 
-ENV TZ=Asia/Tokyo
-
 EXPOSE 8080
 ENTRYPOINT ["/bin/server"]
