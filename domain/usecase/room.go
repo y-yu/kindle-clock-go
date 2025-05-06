@@ -1,10 +1,11 @@
 package usecase
 
 import (
+	"context"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 )
 
-type ShowKindleImageUsecaseResult struct {
+type AllRoomInfo struct {
 	AwairRoomInfo      model.AwairRoomInfo
 	NatureRemoRoomInfo model.NatureRemoRoomInfo
 	SwitchBotMeterInfo model.SwitchBotRoomInfo
@@ -12,5 +13,5 @@ type ShowKindleImageUsecaseResult struct {
 }
 
 type GetRoomInfoUsecase interface {
-	Execute() (ShowKindleImageUsecaseResult, error)
+	Execute(ctx context.Context) (AllRoomInfo, error)
 }

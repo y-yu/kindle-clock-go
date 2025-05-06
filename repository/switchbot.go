@@ -11,7 +11,7 @@ import (
 	"github.com/y-yu/kindle-clock-go/domain/model/config"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/cache/proto"
-	"log"
+	"log/slog"
 )
 
 type SwitchBotRepositoryImpl struct {
@@ -31,7 +31,7 @@ func NewSwitchBotRepository(
 ) repository.SwitchBotRepository {
 	var c config.SwitchBotConfiguration
 	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
+		slog.Error("failed to process configuration for NewSwitchBotRepository", "err", err)
 	}
 
 	return &SwitchBotRepositoryImpl{
@@ -42,7 +42,7 @@ func NewSwitchBotRepository(
 	}
 }
 
-func (s SwitchBotRepositoryImpl) GetRoomInfo(ctx context.Context) (model.SwitchBotRoomInfo, error) {
+func (s *SwitchBotRepositoryImpl) GetRoomInfo(ctx context.Context) (model.SwitchBotRoomInfo, error) {
 	cached, err := s.switchBotCacheClient.Get(ctx, s.config.CacheKeyName)
 	if err != nil {
 		return model.SwitchBotRoomInfo{}, err

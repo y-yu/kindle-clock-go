@@ -29,7 +29,7 @@ func NewOpenWeatherMapAPIClient(ctx context.Context) api.OpenWeatherMapAPIClient
 	}
 }
 
-func (o OpenWeatherMapAPIClientImpl) GetLatest(_ context.Context) (api.OpenWeatherMapInfo, error) {
+func (o *OpenWeatherMapAPIClientImpl) GetLatest(_ context.Context) (api.OpenWeatherMapInfo, error) {
 	url := fmt.Sprintf(
 		"%s/data/2.5/weather?lat=%s&lon=%s&appid=%s",
 		o.config.OpenWeatherMapEndPointURL,

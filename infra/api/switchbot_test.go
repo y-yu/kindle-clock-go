@@ -8,7 +8,7 @@ import (
 )
 
 func TestSwitchBotAPIClientImpl_GetDevices(t *testing.T) {
-	t.Run("success to parse JSON as ", func(t *testing.T) {
+	t.Run("success to parse JSON as SwitchBotDevicesResponse", func(t *testing.T) {
 		jsonStr := `{
 			"statusCode": 100,
 			"body": {

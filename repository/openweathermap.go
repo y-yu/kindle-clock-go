@@ -6,6 +6,7 @@ import (
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
+	"time"
 )
 
 type OpenWeatherMapRepositoryImpl struct {
@@ -20,7 +21,7 @@ func NewOpenWeatherMapRepository(client api.OpenWeatherMapAPIClient) repository.
 	}
 }
 
-func (o OpenWeatherMapRepositoryImpl) GetCurrentWeather(ctx context.Context) (model.Weather, error) {
+func (o *OpenWeatherMapRepositoryImpl) GetCurrentWeather(ctx context.Context) (model.Weather, error) {
 	data, err := o.client.GetLatest(ctx)
 	if err != nil {
 		return model.Weather{}, err
@@ -30,6 +31,7 @@ func (o OpenWeatherMapRepositoryImpl) GetCurrentWeather(ctx context.Context) (mo
 	}
 
 	return model.Weather{
-		Icon: data.Weather[0].Icon,
+		Icon:     data.Weather[0].Icon,
+		Datetime: time.Unix(data.Datetime, 0),
 	}, nil
 }

@@ -6,10 +6,10 @@ option go_package = "github.com/y-yu/kindle-clock-go/proto";
 
 message AwairDataModel {
   int32 score = 1;
-  double temperature = 2;
-  double humidity = 3;
+  float temperature = 2;
+  float humidity = 3;
   int32 co2 = 4;
   int32 voc = 5;
-  double pm25 = 6;
+  float pm25 = 6;
   int64 created_at_milliseconds = 7;
 }

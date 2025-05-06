@@ -18,7 +18,7 @@ RUN apt-get update && \
     software-properties-common apt-transport-https ca-certificates curl && \
     add-apt-repository ppa:inkscape.dev/stable && \
     apt-get update && \
-    apt-get install -y --no-install-recommends inkscape && \
+    apt-get install -y --no-install-recommends fonts-roboto fonts-dosis inkscape && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

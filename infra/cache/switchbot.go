@@ -23,7 +23,7 @@ func NewSwitchBotCacheClient(ctx context.Context) domain.CacheClient[*proto.Swit
 	return &SwitchBotCacheClientImpl{redisClient}
 }
 
-func (s SwitchBotCacheClientImpl) Get(
+func (s *SwitchBotCacheClientImpl) Get(
 	ctx context.Context,
 	key string,
 ) (*proto.SwitchBotDevicesDataModel, error) {
@@ -41,7 +41,7 @@ func (s SwitchBotCacheClientImpl) Get(
 	return data, nil
 }
 
-func (s SwitchBotCacheClientImpl) Set(
+func (s *SwitchBotCacheClientImpl) Set(
 	ctx context.Context,
 	key string,
 	value *proto.SwitchBotDevicesDataModel,

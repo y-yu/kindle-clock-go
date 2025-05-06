@@ -63,5 +63,6 @@ func TestOpenWeatherMapAPIClientImplParseJSON(t *testing.T) {
 		require.NoError(t, err)
 		require.Len(t, actual.Weather, 1)
 		require.Equal(t, "10d", actual.Weather[0].Icon)
+		require.Equal(t, int64(188888888), actual.Datetime)
 	})
 }

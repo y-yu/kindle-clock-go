@@ -10,7 +10,7 @@ import (
 	"github.com/y-yu/kindle-clock-go/domain/model/config"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/cache/proto"
-	"log"
+	"log/slog"
 	"time"
 )
 
@@ -29,7 +29,7 @@ func NewAwairRepository(
 ) repository.AwairRepository {
 	var c config.AwairConfiguration
 	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
+		slog.Error("failed to process configuration for NewAwairRepository", "err", err)
 	}
 
 	return &AwairRepositoryImpl{
@@ -91,11 +91,11 @@ func (a *AwairRepositoryImpl) GetRoomInfo(ctx context.Context) (model.AwairRoomI
 	nowMilliSeconds := a.clock.Now().UnixNano() / int64(time.Millisecond)
 	protoData := proto.AwairDataModel{
 		Score:                 int32(result.Score),
-		Temperature:           float64(result.Temperature),
-		Humidity:              float64(result.Humidity),
+		Temperature:           float32(result.Temperature),
+		Humidity:              float32(result.Humidity),
 		Co2:                   int32(result.Co2),
 		Voc:                   int32(result.Voc),
-		Pm25:                  float64(result.Pm25),
+		Pm25:                  float32(result.Pm25),
 		CreatedAtMilliseconds: nowMilliSeconds,
 	}
 	err = a.awairCacheClient.Set(ctx, a.config.CacheKeyName, &protoData, a.config.CacheExpire)
