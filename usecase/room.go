@@ -33,7 +33,7 @@ func NewGetRoomInfoUsecase(
 func (g *GetRoomInfoUsecaseImpl) Execute(ctx context.Context) (result usecase.AllRoomInfo, err error) {
 	var wg sync.WaitGroup
 
-	errChan := make(chan error)
+	errChan := make(chan error, 4)
 	defer close(errChan)
 
 	wg.Add(1)
@@ -80,19 +80,12 @@ func (g *GetRoomInfoUsecaseImpl) Execute(ctx context.Context) (result usecase.Al
 		result.Weather = weather
 	}()
 
+	wg.Wait()
+
 	select {
 	case err = <-errChan:
 		return result, err
-	case <-sendAfterWaitWg(&wg):
+	default:
 		return result, nil
 	}
-}
-
-func sendAfterWaitWg(wg *sync.WaitGroup) chan struct{} {
-	done := make(chan struct{})
-	go func() {
-		defer close(done)
-		wg.Wait()
-	}()
-	return done
 }

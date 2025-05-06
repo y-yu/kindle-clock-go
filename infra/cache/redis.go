@@ -6,6 +6,7 @@ import (
 	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/domain/model/config"
 	"log/slog"
+	"net/url"
 	"sync"
 )
 
@@ -26,13 +27,18 @@ func InitializeRedisClient(ctx context.Context) error {
 		slog.Error("Failed to initialize redis client", "err", err)
 		return err
 	}
-	slog.Info("Initialized redis client")
+	redisURL, err := url.Parse(c.URL)
+	if err != nil {
+		slog.Error("Failed to parse Redis URL", "err", err)
+		return err
+	}
 
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     c.URL,
+		Addr:     redisURL.Host,
 		Password: "", // no password set
 		DB:       0,  // use default DB
 	})
+	slog.Info("Initialized redis client")
 
 	return nil
 }
