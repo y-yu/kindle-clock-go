@@ -34,6 +34,7 @@ func ConvertSVGToPNG(
 			"--export-filename=-",
 			"--export-type=png",
 			"--export-background="+bgColor,
+			"--export-png-color-mode=Gray_8",
 			"--export-width="+fmt.Sprintf("%d", width),
 			"--export-height="+fmt.Sprintf("%d", height),
 		)
