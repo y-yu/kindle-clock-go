@@ -14,8 +14,7 @@ import (
 	"github.com/y-yu/kindle-clock-go/domain/usecase"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
-	"github.com/y-yu/kindle-clock-go/presenter/clock"
-	"github.com/y-yu/kindle-clock-go/presenter/room"
+	"github.com/y-yu/kindle-clock-go/presenter"
 	repository2 "github.com/y-yu/kindle-clock-go/repository"
 	usecase2 "github.com/y-yu/kindle-clock-go/usecase"
 )
@@ -66,7 +65,7 @@ func GetRoomInfoUsecase(ctx context.Context) usecase.GetRoomInfoUsecase {
 	return getRoomInfoUsecase
 }
 
-func RoomInfoHandler(ctx context.Context) *room.RoomInfoHandler {
+func RoomInfoHandler(ctx context.Context) *presenter.RoomInfoHandler {
 	natureRemoAPIClient := api.NewNatureRemoAPIClient(ctx)
 	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoAPIClient)
 	switchBotAPIClient := api.NewSwitchBotAPIClient(ctx)
@@ -79,19 +78,19 @@ func RoomInfoHandler(ctx context.Context) *room.RoomInfoHandler {
 	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(ctx)
 	openWeatherMapRepository := repository2.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
 	getRoomInfoUsecase := usecase2.NewGetRoomInfoUsecase(natureRemoRepository, switchBotRepository, awairRepository, openWeatherMapRepository)
-	roomInfoHandler := room.NewRoomInfoHandler(ctx, getRoomInfoUsecase, systemClock)
+	roomInfoHandler := presenter.NewRoomInfoHandler(ctx, getRoomInfoUsecase, systemClock)
 	return roomInfoHandler
 }
 
-func ClockHandler(ctx context.Context) *clock.ClockHandler {
+func ClockHandler(ctx context.Context) *presenter.ClockHandler {
 	systemClock := domain.NewSystemClock()
-	clockHandler := clock.NewClockHandler(systemClock)
+	clockHandler := presenter.NewClockHandler(ctx, systemClock)
 	return clockHandler
 }
 
 // wire.go:
 
-var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, usecase2.NewGetRoomInfoUsecase, room.NewRoomInfoHandler, clock.NewClockHandler, wire.Bind(
+var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, usecase2.NewGetRoomInfoUsecase, presenter.NewRoomInfoHandler, presenter.NewClockHandler, wire.Bind(
 	new(domain.Clock),
 	new(*domain.SystemClock),
 ),

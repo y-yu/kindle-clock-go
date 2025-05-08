@@ -6,8 +6,8 @@ import (
 	"github.com/go-json-experiment/json"
 	"github.com/go-playground/validator/v10"
 	"github.com/sethvargo/go-envconfig"
+	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
-	"github.com/y-yu/kindle-clock-go/domain/model/config"
 	"log"
 	"log/slog"
 )

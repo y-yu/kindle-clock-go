@@ -1,11 +1,7 @@
 package room
 
 import (
-	"bytes"
 	"fmt"
-	"github.com/y-yu/kindle-clock-go/domain/usecase"
-	"github.com/y-yu/kindle-clock-go/presenter"
-	"time"
 )
 
 const svgStringFormat = `<svg width="%d" height="%d" xmlns="http://www.w3.org/2000/svg">
@@ -89,46 +85,48 @@ const svgStringFormat = `<svg width="%d" height="%d" xmlns="http://www.w3.org/20
 		</g>
 </svg>`
 
+/*
 func GeneratePNGImage(
+
 	result usecase.AllRoomInfo,
 	now time.Time,
+
 ) (bytes.Buffer, error) {
-	var buf bytes.Buffer
 
-	weatherIcon, err := ConvertToIcon(result.Weather.Icon)
-	if err != nil {
-		return buf, err
+		weatherIcon, err := ConvertToIcon(result.Weather.Icon)
+		if err != nil {
+			return buf, err
+		}
+
+		//colors := presenter.CalculateColors(now)
+
+		// Generate your SVG data here
+		svgString := fmt.Sprintf(
+			svgStringFormat,
+			presenter.Width,
+			presenter.Height,
+			"white",
+			"white",
+			weatherIcon,
+			result.Weather.Datetime.Format(time.RFC3339),
+			now.Format("15:04"),
+			result.AwairRoomInfo.Score,
+			floatSawedOffString(result.AwairRoomInfo.Temperature),
+			floatSawedOffString(result.NatureRemoRoomInfo.Temperature),
+			floatSawedOffString(result.SwitchBotMeterInfo.Temperature),
+			floatSawedOffString(result.AwairRoomInfo.Humidity),
+			floatSawedOffString(result.NatureRemoRoomInfo.Humidity),
+			floatSawedOffString(result.SwitchBotMeterInfo.Humidity),
+			result.NatureRemoRoomInfo.ElectricEnergy,
+			result.AwairRoomInfo.Co2,
+			result.AwairRoomInfo.Voc,
+			floatSawedOffString(result.AwairRoomInfo.Pm25),
+		)
+		buf, err = presenter.ConvertSVGToPNG(svgString, "black", presenter.Width, presenter.Height)
+
+		return buf, nil
 	}
-
-	colors := presenter.CalculateColors(now)
-
-	// Generate your SVG data here
-	svgString := fmt.Sprintf(
-		svgStringFormat,
-		presenter.Width,
-		presenter.Height,
-		colors.Text,
-		colors.Text,
-		weatherIcon,
-		result.Weather.Datetime.Format(time.RFC3339),
-		now.Format("15:04"),
-		result.AwairRoomInfo.Score,
-		floatSawedOffString(result.AwairRoomInfo.Temperature),
-		floatSawedOffString(result.NatureRemoRoomInfo.Temperature),
-		floatSawedOffString(result.SwitchBotMeterInfo.Temperature),
-		floatSawedOffString(result.AwairRoomInfo.Humidity),
-		floatSawedOffString(result.NatureRemoRoomInfo.Humidity),
-		floatSawedOffString(result.SwitchBotMeterInfo.Humidity),
-		result.NatureRemoRoomInfo.ElectricEnergy,
-		result.AwairRoomInfo.Co2,
-		result.AwairRoomInfo.Voc,
-		floatSawedOffString(result.AwairRoomInfo.Pm25),
-	)
-	buf, err = presenter.ConvertSVGToPNG(svgString, colors.Bg, presenter.Width, presenter.Height)
-
-	return buf, nil
-}
-
+*/
 func floatSawedOffString[A ~float32](d A) string {
 	return fmt.Sprintf("%2.1f", d)
 }
