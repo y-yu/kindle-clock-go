@@ -17,9 +17,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* &&  \
     update-ca-certificates
-RUN mkdir /bin/etc && \
-    curl -sSL -o "/bin/etc/RobotoSlab.ttf" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/apache/robotoslab/RobotoSlab%5Bwght%5D.ttf" && \
-    curl -sSL -o "/bin/etc/Dosis.ttf" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/dosis/Dosis%5Bwght%5D.ttf"
+
+ENV DOSIS_FONT_PATH=/etc/Dosis.ttf
+ENV ROBOTO_SLAB_FONT_PATH=/etc/RobotoSlab.ttf
+RUN curl -sSL -o "$ROBOTO_SLAB_FONT_PATH" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/apache/robotoslab/RobotoSlab%5Bwght%5D.ttf" && \
+    curl -sSL -o "$DOSIS_FONT_PATH" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/dosis/Dosis%5Bwght%5D.ttf"
 
 COPY --from=builder /app/server /bin/server
 
