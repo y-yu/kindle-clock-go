@@ -24,6 +24,7 @@ RUN curl -sSL -o "$ROBOTO_SLAB_FONT_PATH" "https://raw.githubusercontent.com/goo
     curl -sSL -o "$DOSIS_FONT_PATH" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/dosis/Dosis%5Bwght%5D.ttf"
 
 COPY --from=builder /app/server /bin/server
+COPY --from=builder /app/etc/weather_icon /etc/weather_icon
 
 EXPOSE 8080
 ENTRYPOINT ["/bin/server"]
