@@ -71,25 +71,17 @@ func (h *RoomInfoHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
-	/*ctx := r.Context()
+	ctx := r.Context()
 	roomInfo, err := h.roomInfoUsecase.Execute(ctx)
 	if err != nil {
 		slog.Error("RoomInfoUsecase.Execute failed", "err", err)
-		w.Write([]byte("error!"))
-	}*/
-	roomInfo := usecase.AllRoomInfo{
-		AwairRoomInfo:      model.AwairRoomInfo{Score: 10, Temperature: 25.5, Humidity: 65.5, Co2: 583, Voc: 100, Pm25: 2.0},
-		NatureRemoRoomInfo: model.NatureRemoRoomInfo{Temperature: 23.5, Humidity: 78.8, ElectricEnergy: 224},
-		SwitchBotMeterInfo: model.SwitchBotRoomInfo{
-			Temperature: 23.1,
-			Humidity:    22.2,
-		},
-		Weather: model.Weather{Icon: "02d"},
+		http.Error(w, "ServerError", http.StatusInternalServerError)
+		return
 	}
-	svg, err := h.generatePNG(roomInfo) //GeneratePNGImage(roomInfo, h.clock.Now())
+	svg, err := h.generatePNG(roomInfo)
 	if err != nil {
 		slog.Error("GeneratePNGImage failed", "err", err)
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		http.Error(w, "ServerError", http.StatusInternalServerError)
 		return
 	}
 	w.Header().Set("Content-Type", "image/png")

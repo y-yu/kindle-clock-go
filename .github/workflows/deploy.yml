@@ -1,0 +1,12 @@
+name: Deploy to Render
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy Render
+        run: curl -sSfL ${{ secrets.RENDER_DEPLOY_URL }}

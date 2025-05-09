@@ -46,7 +46,8 @@ func (ch *ClockHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	buf, err := ch.generatePNG()
 	if err != nil {
 		slog.Error("failed to create PNG", "err", err)
-		w.WriteHeader(http.StatusInternalServerError)
+		http.Error(w, "ServerError", http.StatusInternalServerError)
+		return
 	}
 	w.Header().Set("Content-Type", "image/png")
 	_, err = w.Write(buf.Bytes())
