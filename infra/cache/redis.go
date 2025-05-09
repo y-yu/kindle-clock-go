@@ -4,7 +4,7 @@ import (
 	"context"
 	"github.com/redis/go-redis/v9"
 	"github.com/sethvargo/go-envconfig"
-	"github.com/y-yu/kindle-clock-go/domain/model/config"
+	"github.com/y-yu/kindle-clock-go/config"
 	"log/slog"
 	"net/url"
 	"sync"

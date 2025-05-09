@@ -13,13 +13,13 @@ FROM ubuntu:24.04
 
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
-    software-properties-common apt-transport-https ca-certificates curl && \
-    add-apt-repository ppa:inkscape.dev/stable && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends fonts-roboto fonts-dosis inkscape && \
+    apt-get install -y --no-install-recommends ca-certificates curl && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* &&  \
+    update-ca-certificates
+RUN mkdir /bin/etc && \
+    curl -sSL -o "/bin/etc/RobotoSlab.ttf" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/apache/robotoslab/RobotoSlab%5Bwght%5D.ttf" && \
+    curl -sSL -o "/bin/etc/Dosis.ttf" "https://raw.githubusercontent.com/google/fonts/refs/heads/main/ofl/dosis/Dosis%5Bwght%5D.ttf"
 
 COPY --from=builder /app/server /bin/server
 

@@ -11,8 +11,7 @@ import (
 	domainUsecase "github.com/y-yu/kindle-clock-go/domain/usecase"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
-	"github.com/y-yu/kindle-clock-go/presenter/clock"
-	"github.com/y-yu/kindle-clock-go/presenter/room"
+	"github.com/y-yu/kindle-clock-go/presenter"
 	"github.com/y-yu/kindle-clock-go/repository"
 	"github.com/y-yu/kindle-clock-go/usecase"
 )
@@ -30,8 +29,8 @@ var binding = wire.NewSet(
 	repository.NewSwitchBotRepository,
 	repository.NewOpenWeatherMapRepository,
 	usecase.NewGetRoomInfoUsecase,
-	room.NewRoomInfoHandler,
-	clock.NewClockHandler,
+	presenter.NewRoomInfoHandler,
+	presenter.NewClockHandler,
 	wire.Bind(
 		new(domain.Clock),
 		new(*domain.SystemClock),
@@ -63,12 +62,12 @@ func GetRoomInfoUsecase(ctx context.Context) domainUsecase.GetRoomInfoUsecase {
 	return nil
 }
 
-func RoomInfoHandler(ctx context.Context) *room.RoomInfoHandler {
+func RoomInfoHandler(ctx context.Context) *presenter.RoomInfoHandler {
 	wire.Build(binding)
 	return nil
 }
 
-func ClockHandler(ctx context.Context) *clock.ClockHandler {
+func ClockHandler(ctx context.Context) *presenter.ClockHandler {
 	wire.Build(binding)
 	return nil
 }

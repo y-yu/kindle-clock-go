@@ -1,7 +1,6 @@
 package model
 
 type SwitchBotRoomInfo struct {
-	Temperature    Temperature
-	Humidity       Humidity
-	ElectricEnergy ElectricEnergy
+	Temperature Temperature
+	Humidity    Humidity
 }
