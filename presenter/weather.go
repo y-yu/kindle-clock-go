@@ -43,6 +43,12 @@ var weatherIcons = sync.OnceValue(func() weather {
 			slog.Error("Failed to open weather icon file", "fileName", fileName, "err", err)
 			panic(err)
 		}
+		defer func(fileName string) {
+			err := f.Close()
+			if err != nil {
+				slog.Error("Failed to close weather icon file", "fileName", fileName, "err", err)
+			}
+		}(fileName)
 		img, err := png.Decode(f)
 		if err != nil {
 			slog.Error("Failed to decode weather icon file", "fileName", fileName, "err", err)

@@ -110,6 +110,24 @@ func (h *RoomInfoHandler) generatePNG(roomInfo usecase.AllRoomInfo) (bytes.Buffe
 	smallUIFace := truetype.NewFace(h.font, &truetype.Options{
 		Size: 50,
 	})
+	defer func() {
+		err := textUIFace.Close()
+		if err != nil {
+			slog.Error("textUIFace.Close()", "err", err)
+		}
+		err = smallTextUIFace.Close()
+		if err != nil {
+			slog.Error("smallTextUIFace.Close()", "err", err)
+		}
+		err = uiFace.Close()
+		if err != nil {
+			slog.Error("uiFace.Close()", "err", err)
+		}
+		err = smallUIFace.Close()
+		if err != nil {
+			slog.Error("smallUIFace.Close()", "err", err)
+		}
+	}()
 
 	img := image.NewGray(image.Rect(0, 0, Width, Height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{colors.Bg}, image.Point{}, draw.Src)
