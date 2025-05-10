@@ -84,6 +84,7 @@ func (h *RoomInfoHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "ServerError", http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "image/png")
 	_, err = w.Write(svg.Bytes())
 	if err != nil {

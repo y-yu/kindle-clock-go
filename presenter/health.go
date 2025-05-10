@@ -28,6 +28,7 @@ func (h *HealthHandler) Handle(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusOK)
+	w.Header().Set("Content-Type", "application/json")
 	_, err = w.Write(out)
 	if err != nil {
 		slog.Error("[HealthHandler#Handle] failed to write health response", "err", err)

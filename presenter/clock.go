@@ -49,6 +49,7 @@ func (ch *ClockHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "ServerError", http.StatusInternalServerError)
 		return
 	}
+	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "image/png")
 	_, err = w.Write(buf.Bytes())
 	if err != nil {
