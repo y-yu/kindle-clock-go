@@ -31,6 +31,7 @@ var binding = wire.NewSet(
 	usecase.NewGetRoomInfoUsecase,
 	presenter.NewRoomInfoHandler,
 	presenter.NewClockHandler,
+	presenter.NewHealthHandler,
 	wire.Bind(
 		new(domain.Clock),
 		new(*domain.SystemClock),
@@ -68,6 +69,11 @@ func RoomInfoHandler(ctx context.Context) *presenter.RoomInfoHandler {
 }
 
 func ClockHandler(ctx context.Context) *presenter.ClockHandler {
+	wire.Build(binding)
+	return nil
+}
+
+func HealthHandler(ctx context.Context) *presenter.HealthHandler {
 	wire.Build(binding)
 	return nil
 }

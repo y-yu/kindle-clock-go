@@ -1,4 +1,4 @@
-ALL_PROTO_SRC  = $(wildcard ./infra/cache/proto/*.proto)
+ALL_PROTO_SRC = $(wildcard ./infra/cache/proto/*.proto)
 
 .PHONY: gen_proto
 gen_proto: $(ALL_PROTO_SRC)
@@ -7,3 +7,9 @@ gen_proto: $(ALL_PROTO_SRC)
 .PHONY: wire_gen
 wire_gen: inject/wire.go
 	wire gen $<
+
+GIT_COMMIT_HASH ?= $(shell git rev-parse HEAD)
+
+.PHONY: air
+air:
+	GIT_COMMIT_HASH=$(GIT_COMMIT_HASH) go tool air

@@ -7,7 +7,12 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server main.go
+
+RUN CGO_ENABLED=0 GOOS=linux \
+    go build \
+      -ldflags="-X github.com/y-yu/kindle-clock-go/domain/build.gitCommitHash=$GIT_COMMIT_HASH -s -w" \
+      -trimpath \
+      -o /app/server main.go
 
 FROM ubuntu:24.04
 
