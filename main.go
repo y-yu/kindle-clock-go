@@ -35,14 +35,12 @@ func main() {
 	r.Use(middleware.Logger)
 	r.Use(errorMiddleware)
 
-	r.Get("/health", func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-	})
-
 	ctx := context.Background()
+	healthHandler := inject.HealthHandler(ctx)
 	roomInfoHandler := inject.RoomInfoHandler(ctx)
 	clockHandler := inject.ClockHandler(ctx)
 
+	r.Get("/health", healthHandler.Handle)
 	r.Get("/", roomInfoHandler.Handle)
 	r.Get("/clock", clockHandler.Handle)
 

@@ -88,9 +88,14 @@ func ClockHandler(ctx context.Context) *presenter.ClockHandler {
 	return clockHandler
 }
 
+func HealthHandler(ctx context.Context) *presenter.HealthHandler {
+	healthHandler := presenter.NewHealthHandler()
+	return healthHandler
+}
+
 // wire.go:
 
-var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, usecase2.NewGetRoomInfoUsecase, presenter.NewRoomInfoHandler, presenter.NewClockHandler, wire.Bind(
+var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, usecase2.NewGetRoomInfoUsecase, presenter.NewRoomInfoHandler, presenter.NewClockHandler, presenter.NewHealthHandler, wire.Bind(
 	new(domain.Clock),
 	new(*domain.SystemClock),
 ),
