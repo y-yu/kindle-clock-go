@@ -111,7 +111,7 @@ func (h *RoomInfoHandler) generatePNG(roomInfo usecase.AllRoomInfo) (bytes.Buffe
 	})
 
 	img := image.NewGray(image.Rect(0, 0, Width, Height))
-	draw.Draw(img, img.Bounds(), &image.Uniform{color.Black}, image.Point{}, draw.Src)
+	draw.Draw(img, img.Bounds(), &image.Uniform{colors.Bg}, image.Point{}, draw.Src)
 
 	err := weatherIcon(img, colors, smallTextUIFace, roomInfo.Weather.Icon, now)
 	if err != nil {
