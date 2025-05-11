@@ -12,14 +12,14 @@ type SystemClock struct {
 
 const locationAsiaTokyo = "Asia/Tokyo"
 
-var jst = time.FixedZone(locationAsiaTokyo, 9*60*60)
+var JST = time.FixedZone(locationAsiaTokyo, 9*60*60)
 
 func NewSystemClock() *SystemClock {
 	return &SystemClock{
-		timezone: jst,
+		timezone: JST,
 	}
 }
 
 func (*SystemClock) Now() time.Time {
-	return time.Now().In(jst)
+	return time.Now().In(JST)
 }

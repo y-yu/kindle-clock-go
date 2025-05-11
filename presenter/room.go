@@ -122,7 +122,7 @@ func (h *RoomInfoHandler) generatePNG(roomInfo usecase.AllRoomInfo) (bytes.Buffe
 	img := image.NewGray(image.Rect(0, 0, Width, Height))
 	draw.Draw(img, img.Bounds(), &image.Uniform{colors.Bg}, image.Point{}, draw.Src)
 
-	err := weatherIcon(img, colors, smallTextUIFace, roomInfo.Weather.Icon, now)
+	err := weatherIcon(img, colors, smallTextUIFace, roomInfo.Weather)
 	if err != nil {
 		return buf, err
 	}
@@ -149,10 +149,9 @@ func weatherIcon(
 	img draw.Image,
 	colors Colors,
 	smallTextUIFace font.Face,
-	icon string,
-	now time.Time,
+	weather model.Weather,
 ) error {
-	weatherIconSrc, err := ConvertToIcon(icon)
+	weatherIconSrc, err := ConvertToIcon(weather.Icon)
 	if err != nil {
 		return err
 	}
@@ -170,7 +169,7 @@ func weatherIcon(
 		Face: smallTextUIFace,
 		Dot:  fixed.P(320, 250),
 	}
-	d.DrawString(now.Format(time.RFC3339))
+	d.DrawString(weather.UpdatedAt.Format(time.RFC3339))
 
 	return nil
 }
