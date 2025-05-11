@@ -46,7 +46,7 @@ func (ch *ClockHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "image/png")
+	w.Header().Add("Content-Type", "image/png")
 	_, err = w.Write(buf.Bytes())
 	if err != nil {
 		slog.Error("[ClockHandler.Handle] failed to write image to output", "err", err)
