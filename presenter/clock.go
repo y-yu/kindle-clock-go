@@ -71,9 +71,9 @@ func (ch *ClockHandler) generatePNG() (bytes.Buffer, error) {
 		Dst:  img,
 		Src:  image.NewUniform(colors.Text),
 		Face: face,
-		Dot:  fixed.P(50, 150),
+		Dot:  fixed.P(0, 150),
 	}
-	d.DrawString(now.Format("Mon, 02 Jan 2006"))
+	DrawStringCentering(d, Height, now.Format("Mon, 02 Jan 2006"))
 
 	face = truetype.NewFace(ch.font, &truetype.Options{
 		Size: 470,
@@ -82,9 +82,10 @@ func (ch *ClockHandler) generatePNG() (bytes.Buffer, error) {
 		Dst:  img,
 		Src:  image.NewUniform(colors.Text),
 		Face: face,
-		Dot:  fixed.P(20, 650),
+		Dot:  fixed.P(0, 650),
 	}
-	d.DrawString(now.Format("15:04"))
+	DrawStringCentering(d, Height, now.Format("15:04"))
+
 	result := rotate90(img)
 
 	var buf bytes.Buffer
