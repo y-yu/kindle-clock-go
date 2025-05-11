@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
@@ -31,7 +32,7 @@ func (o *OpenWeatherMapRepositoryImpl) GetCurrentWeather(ctx context.Context) (m
 	}
 
 	return model.Weather{
-		Icon:     data.Weather[0].Icon,
-		Datetime: time.Unix(data.Datetime, 0),
+		Icon:      data.Weather[0].Icon,
+		UpdatedAt: time.Unix(data.Datetime, 0).In(domain.JST),
 	}, nil
 }
