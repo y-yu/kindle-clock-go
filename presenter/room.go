@@ -108,7 +108,7 @@ func (h *RoomInfoHandler) generatePNG(roomInfo usecase.AllRoomInfo) (bytes.Buffe
 		Size: 20,
 	})
 	smallUIFace := truetype.NewFace(h.font, &truetype.Options{
-		Size: 50,
+		Size: 60,
 	})
 	defer func() {
 		err := textUIFace.Close()
@@ -318,7 +318,7 @@ func airInfoTable(
 		Dst:  img,
 		Src:  image.NewUniform(textColor),
 		Face: textUIFace,
-		Dot:  fixed.P(40, 900),
+		Dot:  fixed.P(30, 900),
 	}
 	d.DrawString("CO")
 	d.Face = smallTextUIFace
@@ -334,12 +334,12 @@ func airInfoTable(
 	d.DrawString(fmt.Sprintf("%d", info.Co2))
 	d.Face = smallTextUIFace
 	d.DrawString("ppm")
-	d.Dot.X += fixed.I(150)
+	d.Dot.X += fixed.I(100)
 	d.Face = smallUIFace
 	d.DrawString(fmt.Sprintf("%d", info.Voc))
 	d.Face = smallTextUIFace
 	d.DrawString("ppb")
-	d.Dot.X += fixed.I(160)
+	d.Dot.X += fixed.I(130)
 	d.Face = smallUIFace
 	d.DrawString(fmt.Sprintf("%s", floatSawedOffString(info.Pm25)))
 	d.Face = smallTextUIFace
