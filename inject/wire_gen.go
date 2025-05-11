@@ -9,82 +9,44 @@ package inject
 import (
 	"context"
 	"github.com/google/wire"
+	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain"
-	"github.com/y-yu/kindle-clock-go/domain/repository"
-	"github.com/y-yu/kindle-clock-go/domain/usecase"
 	"github.com/y-yu/kindle-clock-go/infra/api"
 	"github.com/y-yu/kindle-clock-go/infra/cache"
 	"github.com/y-yu/kindle-clock-go/presenter"
-	repository2 "github.com/y-yu/kindle-clock-go/repository"
-	usecase2 "github.com/y-yu/kindle-clock-go/usecase"
+	"github.com/y-yu/kindle-clock-go/repository"
+	"github.com/y-yu/kindle-clock-go/usecase"
 )
 
 // Injectors from wire.go:
 
-func AwairRepository(ctx context.Context) repository.AwairRepository {
-	awairAPIClient := api.NewAwairAPIClient(ctx)
-	cacheClient := cache.NewAwairCacheClient(ctx)
-	systemClock := domain.NewSystemClock()
-	awairRepository := repository2.NewAwairRepository(ctx, awairAPIClient, cacheClient, systemClock)
-	return awairRepository
-}
-
-func NatureRemoRepository(ctx context.Context) repository.NatureRemoRepository {
-	natureRemoAPIClient := api.NewNatureRemoAPIClient(ctx)
-	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoAPIClient)
-	return natureRemoRepository
-}
-
-func SwitchBotRepository(ctx context.Context) repository.SwitchBotRepository {
-	switchBotAPIClient := api.NewSwitchBotAPIClient(ctx)
-	cacheClient := cache.NewSwitchBotCacheClient(ctx)
-	systemClock := domain.NewSystemClock()
-	switchBotRepository := repository2.NewSwitchBotRepository(ctx, switchBotAPIClient, cacheClient, systemClock)
-	return switchBotRepository
-}
-
-func OpenWeatherMapRepository(ctx context.Context) repository.OpenWeatherMapRepository {
-	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(ctx)
-	openWeatherMapRepository := repository2.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
-	return openWeatherMapRepository
-}
-
-func GetRoomInfoUsecase(ctx context.Context) usecase.GetRoomInfoUsecase {
-	natureRemoAPIClient := api.NewNatureRemoAPIClient(ctx)
-	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoAPIClient)
-	switchBotAPIClient := api.NewSwitchBotAPIClient(ctx)
-	cacheClient := cache.NewSwitchBotCacheClient(ctx)
-	systemClock := domain.NewSystemClock()
-	switchBotRepository := repository2.NewSwitchBotRepository(ctx, switchBotAPIClient, cacheClient, systemClock)
-	awairAPIClient := api.NewAwairAPIClient(ctx)
-	domainCacheClient := cache.NewAwairCacheClient(ctx)
-	awairRepository := repository2.NewAwairRepository(ctx, awairAPIClient, domainCacheClient, systemClock)
-	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(ctx)
-	openWeatherMapRepository := repository2.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
-	getRoomInfoUsecase := usecase2.NewGetRoomInfoUsecase(natureRemoRepository, switchBotRepository, awairRepository, openWeatherMapRepository)
-	return getRoomInfoUsecase
-}
-
 func RoomInfoHandler(ctx context.Context) *presenter.RoomInfoHandler {
-	natureRemoAPIClient := api.NewNatureRemoAPIClient(ctx)
-	natureRemoRepository := repository2.NewNatureRemoRepository(natureRemoAPIClient)
-	switchBotAPIClient := api.NewSwitchBotAPIClient(ctx)
+	natureRemoConfiguration := config.NewNatureRemoConfiguration(ctx)
+	natureRemoAPIClient := api.NewNatureRemoAPIClient(natureRemoConfiguration)
+	natureRemoRepository := repository.NewNatureRemoRepository(natureRemoAPIClient, natureRemoConfiguration)
+	switchBotConfiguration := config.NewSwitchBotConfiguration(ctx)
+	switchBotAPIClient := api.NewSwitchBotAPIClient(switchBotConfiguration)
 	cacheClient := cache.NewSwitchBotCacheClient(ctx)
 	systemClock := domain.NewSystemClock()
-	switchBotRepository := repository2.NewSwitchBotRepository(ctx, switchBotAPIClient, cacheClient, systemClock)
-	awairAPIClient := api.NewAwairAPIClient(ctx)
+	switchBotRepository := repository.NewSwitchBotRepository(switchBotAPIClient, cacheClient, switchBotConfiguration, systemClock)
+	awairConfiguration := config.NewAwairConfiguration(ctx)
+	awairAPIClient := api.NewAwairAPIClient(awairConfiguration)
 	domainCacheClient := cache.NewAwairCacheClient(ctx)
-	awairRepository := repository2.NewAwairRepository(ctx, awairAPIClient, domainCacheClient, systemClock)
-	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(ctx)
-	openWeatherMapRepository := repository2.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
-	getRoomInfoUsecase := usecase2.NewGetRoomInfoUsecase(natureRemoRepository, switchBotRepository, awairRepository, openWeatherMapRepository)
-	roomInfoHandler := presenter.NewRoomInfoHandler(ctx, getRoomInfoUsecase, systemClock)
+	awairRepository := repository.NewAwairRepository(awairConfiguration, awairAPIClient, domainCacheClient, systemClock)
+	openWeatherMapConfiguration := config.NewOpenWeatherMapConfiguration(ctx)
+	openWeatherMapAPIClient := api.NewOpenWeatherMapAPIClient(openWeatherMapConfiguration)
+	openWeatherMapRepository := repository.NewOpenWeatherMapRepository(openWeatherMapAPIClient)
+	getRoomInfoUsecase := usecase.NewGetRoomInfoUsecase(natureRemoRepository, switchBotRepository, awairRepository, openWeatherMapRepository)
+	authenticationConfiguration := config.NewAuthenticationConfiguration(ctx)
+	fontConfiguration := config.NewFontConfiguration(ctx)
+	roomInfoHandler := presenter.NewRoomInfoHandler(getRoomInfoUsecase, authenticationConfiguration, fontConfiguration, systemClock)
 	return roomInfoHandler
 }
 
 func ClockHandler(ctx context.Context) *presenter.ClockHandler {
+	fontConfiguration := config.NewFontConfiguration(ctx)
 	systemClock := domain.NewSystemClock()
-	clockHandler := presenter.NewClockHandler(ctx, systemClock)
+	clockHandler := presenter.NewClockHandler(fontConfiguration, systemClock)
 	return clockHandler
 }
 
@@ -95,7 +57,7 @@ func HealthHandler(ctx context.Context) *presenter.HealthHandler {
 
 // wire.go:
 
-var binding = wire.NewSet(domain.NewSystemClock, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository2.NewAwairRepository, repository2.NewNatureRemoRepository, repository2.NewSwitchBotRepository, repository2.NewOpenWeatherMapRepository, usecase2.NewGetRoomInfoUsecase, presenter.NewRoomInfoHandler, presenter.NewClockHandler, presenter.NewHealthHandler, wire.Bind(
+var binding = wire.NewSet(domain.NewSystemClock, config.NewAwairConfiguration, config.NewAuthenticationConfiguration, config.NewFontConfiguration, config.NewNatureRemoConfiguration, config.NewOpenWeatherMapConfiguration, config.NewRedisConfiguration, config.NewSwitchBotConfiguration, api.NewAwairAPIClient, api.NewNatureRemoAPIClient, api.NewSwitchBotAPIClient, api.NewOpenWeatherMapAPIClient, cache.NewAwairCacheClient, cache.NewSwitchBotCacheClient, repository.NewAwairRepository, repository.NewNatureRemoRepository, repository.NewSwitchBotRepository, repository.NewOpenWeatherMapRepository, usecase.NewGetRoomInfoUsecase, presenter.NewRoomInfoHandler, presenter.NewClockHandler, presenter.NewHealthHandler, wire.Bind(
 	new(domain.Clock),
 	new(*domain.SystemClock),
 ),

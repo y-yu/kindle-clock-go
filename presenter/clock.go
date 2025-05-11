@@ -2,9 +2,7 @@ package presenter
 
 import (
 	"bytes"
-	"context"
 	"github.com/golang/freetype/truetype"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"golang.org/x/image/font"
@@ -23,12 +21,10 @@ type ClockHandler struct {
 	clock  domain.Clock
 }
 
-func NewClockHandler(ctx context.Context, clock domain.Clock) *ClockHandler {
-	var c config.FontConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		slog.Error("failed to process configuration for NewClockHandler", "err", err)
-	}
-
+func NewClockHandler(
+	c *config.FontConfiguration,
+	clock domain.Clock,
+) *ClockHandler {
 	fontFile, err := os.ReadFile(c.DosisFontPath)
 	if err != nil {
 		slog.Error("NewClockHandler font loading error", "err", err)

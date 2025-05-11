@@ -4,18 +4,16 @@ import (
 	"context"
 	"errors"
 	"github.com/samber/lo"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/cache/proto"
-	"log/slog"
 )
 
 type SwitchBotRepositoryImpl struct {
-	config               config.SwitchBotConfiguration
+	config               *config.SwitchBotConfiguration
 	switchBotAPIClient   api.SwitchBotAPIClient
 	switchBotCacheClient domain.CacheClient[*proto.SwitchBotDevicesDataModel]
 	clock                domain.Clock
@@ -24,16 +22,11 @@ type SwitchBotRepositoryImpl struct {
 var _ repository.SwitchBotRepository = (*SwitchBotRepositoryImpl)(nil)
 
 func NewSwitchBotRepository(
-	ctx context.Context,
 	switchBotAPIClient api.SwitchBotAPIClient,
 	switchBotCacheClient domain.CacheClient[*proto.SwitchBotDevicesDataModel],
+	c *config.SwitchBotConfiguration,
 	clock domain.Clock,
 ) repository.SwitchBotRepository {
-	var c config.SwitchBotConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		slog.Error("failed to process configuration for NewSwitchBotRepository", "err", err)
-	}
-
 	return &SwitchBotRepositoryImpl{
 		config:               c,
 		switchBotAPIClient:   switchBotAPIClient,

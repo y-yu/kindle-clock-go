@@ -8,23 +8,17 @@ import (
 	"fmt"
 	"github.com/go-json-experiment/json"
 	"github.com/google/uuid"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
-	"log"
 	"net/http"
 	"time"
 )
 
 type SwitchBotAPIClientImpl struct {
-	config config.SwitchBotConfiguration
+	config *config.SwitchBotConfiguration
 }
 
-func NewSwitchBotAPIClient(ctx context.Context) api.SwitchBotAPIClient {
-	var c config.SwitchBotConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
-	}
+func NewSwitchBotAPIClient(c *config.SwitchBotConfiguration) api.SwitchBotAPIClient {
 	return &SwitchBotAPIClientImpl{
 		config: c,
 	}

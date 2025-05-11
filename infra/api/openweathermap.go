@@ -4,26 +4,20 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-json-experiment/json"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"io"
-	"log"
 	"log/slog"
 	"net/http"
 )
 
 type OpenWeatherMapAPIClientImpl struct {
-	config config.OpenWeatherMapConfiguration
+	config *config.OpenWeatherMapConfiguration
 }
 
 var _ api.OpenWeatherMapAPIClient = (*OpenWeatherMapAPIClientImpl)(nil)
 
-func NewOpenWeatherMapAPIClient(ctx context.Context) api.OpenWeatherMapAPIClient {
-	var c config.OpenWeatherMapConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
-	}
+func NewOpenWeatherMapAPIClient(c *config.OpenWeatherMapConfiguration) api.OpenWeatherMapAPIClient {
 	return &OpenWeatherMapAPIClientImpl{
 		config: c,
 	}
