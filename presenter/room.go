@@ -170,7 +170,8 @@ func weatherIcon(
 	if colors.Bg == color.Black {
 		weatherIcon = invertGray(weatherIconSrc)
 	}
-	rect := image.Rectangle{Min: image.Point{}, Max: image.Point{}.Add(weatherIcon.Bounds().Size())}
+	initialPoint := image.Point{20, 0}
+	rect := image.Rectangle{Min: initialPoint, Max: initialPoint.Add(weatherIcon.Bounds().Size())}
 	draw.Draw(img, rect, weatherIcon, weatherIcon.Bounds().Min, draw.Over)
 
 	d := &font.Drawer{
@@ -190,18 +191,22 @@ func clock(
 	textUIFace font.Face,
 	now time.Time,
 ) {
+	const (
+		clockReactX      = 512
+		clockReactLength = 86
+	)
 	rect := image.Rect(510, 30, 600, 80)
 	draw.Draw(img, rect, &image.Uniform{colors.Text}, rect.Bounds().Min, draw.Over)
-	rect = image.Rect(512, 32, 598, 78)
+	rect = image.Rect(clockReactX, 32, clockReactX+clockReactLength, 78)
 	draw.Draw(img, rect, &image.Uniform{colors.Bg}, rect.Bounds().Min, draw.Over)
 
 	d := &font.Drawer{
 		Dst:  img,
 		Src:  image.NewUniform(colors.Text),
 		Face: textUIFace,
-		Dot:  fixed.P(520, 65),
+		Dot:  fixed.P(clockReactX, 65),
 	}
-	d.DrawString(now.Format("15:04"))
+	DrawStringCentering(d, clockReactLength, now.Format("15:04"))
 }
 
 func score(
