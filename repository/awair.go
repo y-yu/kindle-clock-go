@@ -3,35 +3,28 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
 	"github.com/y-yu/kindle-clock-go/infra/cache/proto"
-	"log/slog"
 	"time"
 )
 
 type AwairRepositoryImpl struct {
-	config           config.AwairConfiguration
+	config           *config.AwairConfiguration
 	awairAPIClient   api.AwairAPIClient
 	awairCacheClient domain.CacheClient[*proto.AwairDataModel]
 	clock            domain.Clock
 }
 
 func NewAwairRepository(
-	ctx context.Context,
+	c *config.AwairConfiguration,
 	awairAPIClient api.AwairAPIClient,
 	awairCacheClient domain.CacheClient[*proto.AwairDataModel],
 	clock domain.Clock,
 ) repository.AwairRepository {
-	var c config.AwairConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		slog.Error("failed to process configuration for NewAwairRepository", "err", err)
-	}
-
 	return &AwairRepositoryImpl{
 		config:           c,
 		awairAPIClient:   awairAPIClient,

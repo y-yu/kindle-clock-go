@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
 	"github.com/y-yu/kindle-clock-go/domain/model"
 	"github.com/y-yu/kindle-clock-go/domain/repository"
@@ -13,11 +14,16 @@ const nowElectricEnergyNumber = 231
 
 type NatureRemoRepositoryImpl struct {
 	client api.NatureRemoAPIClient
+	config *config.NatureRemoConfiguration
 }
 
-func NewNatureRemoRepository(client api.NatureRemoAPIClient) repository.NatureRemoRepository {
+func NewNatureRemoRepository(
+	client api.NatureRemoAPIClient,
+	c *config.NatureRemoConfiguration,
+) repository.NatureRemoRepository {
 	return &NatureRemoRepositoryImpl{
 		client: client,
+		config: c,
 	}
 }
 

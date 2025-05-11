@@ -4,21 +4,15 @@ import (
 	"context"
 	"fmt"
 	"github.com/go-json-experiment/json"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
-	"log"
 )
 
 type AwairAPIClientImpl struct {
-	config config.AwairConfiguration
+	config *config.AwairConfiguration
 }
 
-func NewAwairAPIClient(ctx context.Context) api.AwairAPIClient {
-	var c config.AwairConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
-	}
+func NewAwairAPIClient(c *config.AwairConfiguration) api.AwairAPIClient {
 	return &AwairAPIClientImpl{
 		config: c,
 	}

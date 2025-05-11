@@ -5,22 +5,16 @@ import (
 	"fmt"
 	"github.com/go-json-experiment/json"
 	"github.com/go-playground/validator/v10"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain/api"
-	"log"
 	"log/slog"
 )
 
 type NatureRemoAPIClientImpl struct {
-	config config.NatureRemoConfiguration
+	config *config.NatureRemoConfiguration
 }
 
-func NewNatureRemoAPIClient(ctx context.Context) api.NatureRemoAPIClient {
-	var c config.NatureRemoConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		log.Fatal(err)
-	}
+func NewNatureRemoAPIClient(c *config.NatureRemoConfiguration) api.NatureRemoAPIClient {
 	return &NatureRemoAPIClientImpl{
 		config: c,
 	}

@@ -2,10 +2,8 @@ package presenter
 
 import (
 	"bytes"
-	"context"
 	"fmt"
 	"github.com/golang/freetype/truetype"
-	"github.com/sethvargo/go-envconfig"
 	"github.com/y-yu/kindle-clock-go/config"
 	"github.com/y-yu/kindle-clock-go/domain"
 	"github.com/y-yu/kindle-clock-go/domain/model"
@@ -23,26 +21,18 @@ import (
 )
 
 type RoomInfoHandler struct {
-	authConfig      config.AuthenticationConfiguration
+	authConfig      *config.AuthenticationConfiguration
 	font            *truetype.Font
 	roomInfoUsecase usecase.GetRoomInfoUsecase
 	clock           domain.Clock
 }
 
 func NewRoomInfoHandler(
-	ctx context.Context,
 	roomInfoUsecase usecase.GetRoomInfoUsecase,
+	c *config.AuthenticationConfiguration,
+	f *config.FontConfiguration,
 	clock domain.Clock,
 ) *RoomInfoHandler {
-	var c config.AuthenticationConfiguration
-	if err := envconfig.Process(ctx, &c); err != nil {
-		slog.Error("failed to process configuration for NewRoomInfoHandler", "err", err)
-	}
-
-	var f config.FontConfiguration
-	if err := envconfig.Process(ctx, &f); err != nil {
-		slog.Error("failed to process configuration for NewRoomInfoHandler", "err", err)
-	}
 	fontFile, err := os.ReadFile(f.RobotoSlabPath)
 	if err != nil {
 		slog.Error("NewRoomInfoHandler failed to open font file", "f", f, "file", f.RobotoSlabPath, "err", err)
