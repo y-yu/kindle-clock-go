@@ -75,7 +75,7 @@ func (h *RoomInfoHandler) Handle(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	w.WriteHeader(http.StatusOK)
-	w.Header().Set("Content-Type", "image/png")
+	w.Header().Add("Content-Type", "image/png")
 	_, err = w.Write(svg.Bytes())
 	if err != nil {
 		slog.Error("[RoomInfoHandler#Handle] failed to write image", "err", err)
