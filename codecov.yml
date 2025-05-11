@@ -1,0 +1,15 @@
+comment:
+  behavior: new
+  require_changes: false
+
+codecov:
+  require_ci_to_pass: false
+
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
