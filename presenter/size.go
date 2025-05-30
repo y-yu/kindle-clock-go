@@ -20,7 +20,7 @@ func DrawStringCentering(
 	// Int26_6 is fixed point number, 26 bits for integer part and 6 bits for fraction part
 	// so in division we have to multiply 2^6 (= 64) to left hand side because Int26_6 is shifted 6 bits for fraction part.
 	x := (fixed.I(width) - length) * 64 / fixed.I(2)
-	slog.Info("DrawStringCentering", "x", x, "int(fixed.I(2))", int(fixed.I(2)), "int(I(width))", int(fixed.I(width)), "I(width)", fixed.I(width), "x", int(x), "length", length, "int(length)", int(length), "str", str)
+	slog.Debug("DrawStringCentering", "x", x, "int(fixed.I(2))", int(fixed.I(2)), "int(I(width))", int(fixed.I(width)), "I(width)", fixed.I(width), "x", int(x), "length", length, "int(length)", int(length), "str", str)
 	d.Dot.X += x
 	d.DrawString(str)
 }
