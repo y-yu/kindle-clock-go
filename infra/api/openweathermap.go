@@ -32,10 +32,15 @@ func (o *OpenWeatherMapAPIClientImpl) GetLatest(_ context.Context) (api.OpenWeat
 		o.config.AppID,
 	)
 	req, err := http.NewRequest(http.MethodGet, url, nil)
+
+	result := api.OpenWeatherMapInfo{}
 	if err != nil {
-		return api.OpenWeatherMapInfo{}, err
+		return result, err
 	}
 	resp, err := client.Do(req)
+	if err != nil {
+		return result, err
+	}
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
@@ -47,7 +52,6 @@ func (o *OpenWeatherMapAPIClientImpl) GetLatest(_ context.Context) (api.OpenWeat
 			)
 		}
 	}()
-	var result api.OpenWeatherMapInfo
 
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
