@@ -32,6 +32,9 @@ func GetRequestAPI[A any](
 	SetAuthHeader(req, oauthToken)
 
 	resp, err := client.Do(req)
+	if err != nil {
+		return result, err
+	}
 	defer func() {
 		err := resp.Body.Close()
 		if err != nil {
