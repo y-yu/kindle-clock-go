@@ -5,7 +5,7 @@ go 1.24
 require (
 	github.com/go-chi/chi/v5 v5.2.2
 	github.com/go-json-experiment/json v0.0.0-20250213060926-925ba3f173fa
-	github.com/go-playground/validator/v10 v10.25.0
+	github.com/go-playground/validator/v10 v10.27.0
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.6.0
