@@ -13,7 +13,7 @@ require (
 	github.com/redis/go-redis/v9 v9.12.1
 	github.com/samber/lo v1.51.0
 	github.com/sethvargo/go-envconfig v1.3.0
-	github.com/stretchr/testify v1.10.0
+	github.com/stretchr/testify v1.11.0
 	golang.org/x/image v0.30.0
 	google.golang.org/protobuf v1.36.7
 )
