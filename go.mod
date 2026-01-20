@@ -3,7 +3,7 @@ module github.com/y-yu/kindle-clock-go
 go 1.24.0
 
 require (
-	github.com/go-chi/chi/v5 v5.2.3
+	github.com/go-chi/chi/v5 v5.2.4
 	github.com/go-json-experiment/json v0.0.0-20250213060926-925ba3f173fa
 	github.com/go-playground/validator/v10 v10.30.1
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
