@@ -14,7 +14,7 @@ require (
 	github.com/samber/lo v1.53.0
 	github.com/sethvargo/go-envconfig v1.3.0
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/image v0.37.0
+	golang.org/x/image v0.38.0
 	google.golang.org/protobuf v1.36.11
 )
 
