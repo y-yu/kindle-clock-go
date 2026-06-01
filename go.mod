@@ -5,7 +5,7 @@ go 1.25.0
 require (
 	github.com/go-chi/chi/v5 v5.3.0
 	github.com/go-json-experiment/json v0.0.0-20250213060926-925ba3f173fa
-	github.com/go-playground/validator/v10 v10.30.2
+	github.com/go-playground/validator/v10 v10.30.3
 	github.com/golang/freetype v0.0.0-20170609003504-e2365dfdc4a0
 	github.com/google/uuid v1.6.0
 	github.com/google/wire v0.7.0
@@ -46,10 +46,10 @@ require (
 	github.com/spf13/cast v1.7.0 // indirect
 	github.com/tdewolff/parse/v2 v2.7.15 // indirect
 	go.uber.org/atomic v1.11.0 // indirect
-	golang.org/x/crypto v0.49.0 // indirect
+	golang.org/x/crypto v0.52.0 // indirect
 	golang.org/x/mod v0.35.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
-	golang.org/x/sys v0.43.0 // indirect
+	golang.org/x/sys v0.45.0 // indirect
 	golang.org/x/text v0.37.0 // indirect
 	golang.org/x/tools v0.44.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
