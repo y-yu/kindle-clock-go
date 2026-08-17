@@ -15,7 +15,7 @@ require (
 	github.com/sethvargo/go-envconfig v1.4.3
 	github.com/stretchr/testify v1.11.1
 	golang.org/x/image v0.44.0
-	google.golang.org/protobuf v1.36.11
+	google.golang.org/protobuf v1.36.12
 )
 
 require (
